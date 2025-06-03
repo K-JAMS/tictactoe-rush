@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { Home } from "./Home";
+import coinhead from "/img/coin/head.png";
+import cointail from "/img/coin/tail.png";
+import headflip from "/img/coin/Heads.gif";
+import tailflip from "/img/coin/Tails.gif";
 
 export const TossCoin = ({onFinish}) => {
   const [step, setStep] = useState("idle");
-  const [image, setImage] = useState("/img/coin/head.png");
+  const [image, setImage] = useState(coinhead);
   const [isCoin, setIsCoin] = useState(null);
 
   const handleFlip = () => {
-    setImage("/img/coin/head.png");
+    setImage(coinhead);
     setStep("preparing");
     setTimeout(() => {
         const random = Math.floor(Math.random() * 2) + 1;
@@ -15,9 +19,9 @@ export const TossCoin = ({onFinish}) => {
         setStep("flip");
 
         const firstImage =
-          random === 1 ? "/img/coin/Heads.gif" : "/img/coin/Tails.gif";
+          random === 1 ? headflip : tailflip;
         const secondImage =
-          random === 2 ? "/img/coin/tail.png" : "/img/coin/head.png";
+          random === 2 ? cointail : coinhead;
 
         setImage(firstImage);
 
@@ -27,7 +31,7 @@ export const TossCoin = ({onFinish}) => {
           
           setTimeout(() => {
             setStep("idle");
-            setImage("/img/coin/head.png");
+            setImage(coinhead);
             onFinish(random);
           }, 1000);
         }, 2000);
