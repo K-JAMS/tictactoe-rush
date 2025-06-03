@@ -61,7 +61,7 @@ export const TossCoin = ({onFinish}) => {
           Tap Anywhere to Flip the Coin
         </h2>
         <h2
-          className={`text-center text-5xl text-yellow-500 object-contain pointer-events-none m-auto lilita-one-regular text-stroke ${
+          className={`text-center text-5xl text-yellow-500 object-contain pointer-events-none m-auto lilita-one-regular text-stroke-white ${
             step === "landed" ? "" : "invisible"
           }`}
         >

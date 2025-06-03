@@ -46,18 +46,15 @@ export const Home = () => {
           <div className="flex items-center justify-center py-20">
             <img
               src="img/TTTR.png"
-              className=" max-w-[400px] min-w-[100px] mx-auto flipping"
+              className=" max-w-[400px] min-w-[100px] mx-auto pointer-events-none"
             />
           </div>
           <div className="flex items-center justify-center py-20">
             <button
               onClick={handleClick}
-              className="transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer"
+              className="transition duration-300 ease-in-out hover:scale-110 cursor-pointer lilita-one-regular text-6xl text-white text-stroke-black"
             >
-              <img
-                src="img/SoloRush.png"
-                className=" max-w-[400px] min-w-[80px] mx-auto pointer-events-none"
-              />
+              SoloRush
             </button>
           </div>
         </>

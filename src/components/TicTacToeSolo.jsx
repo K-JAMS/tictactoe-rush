@@ -243,21 +243,15 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         <div>
           <button
             onClick={handleRestart}
-            className="block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-5xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
           >
-            <img
-              src="img/Restart.png"
-              className=" max-w-[400px] min-w-[80px] mx-auto pointer-events-none"
-            />
+            Restart
           </button>
           <button
             onClick={handleExit}
-            className="block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-5xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
           >
-            <img
-              src="img/Exit.png"
-              className=" max-w-[400px] min-w-[80px] mx-auto pointer-events-none"
-            />
+            Exit
           </button>
         </div>
       </div>
@@ -265,7 +259,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         <div className="flex justify-between items-center py-10">
           <img
             src="img/TTTR.png"
-            className=" max-w-[300px] min-w-[100px] mx-auto"
+            className=" max-w-[300px] min-w-[100px] mx-auto pointer-events-none"
           />
           <button
             onClick={() => setPause(true)}
@@ -296,7 +290,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
               <Square value={squares[8]} onClick={() => handleClick(8)} />
             </div>
           </div>
-          <div className="mx-auto text-center lilita-one-regular text-yellow-500 text-5xl text-stroke">
+          <div className="mx-auto text-center lilita-one-regular text-yellow-500 text-5xl text-stroke-white">
             {status}
           </div>
         </div>

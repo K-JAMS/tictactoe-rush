@@ -10,8 +10,11 @@
     font-style: normal;
   }
 
-  .text-stroke{
+  .text-stroke-white{
     -webkit-text-stroke: 2px white;
+  }
+  .text-stroke-black{
+    -webkit-text-stroke: 2px black;
   }
 
   @keyframes grow-shrink {
