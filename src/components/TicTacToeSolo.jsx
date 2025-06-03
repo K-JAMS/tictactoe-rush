@@ -1,0 +1,306 @@
+import React, { useEffect, useState } from "react";
+import circleImg from "/img/Circle.png";
+import crossImg from "/img/Cross.png";
+
+export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
+  const playerSymbol = parseInt(result) === 1 ? "x" : "o";
+  const aiSymbol = playerSymbol === "x" ? "o" : "x";
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [isPlayerTurn, setIsPlayerTurn] = useState(playerSymbol === "x");
+  const [pause, setPause] = useState(false);
+
+  const calculateWinner = (squares) => {
+    const winningPatterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let i = 0; i < winningPatterns.length; i++) {
+      const [a, b, c] = winningPatterns[i];
+
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return squares[a];
+      }
+    }
+    return null;
+  };
+  const winner = calculateWinner(squares);
+  const isDraw = !squares.includes(null) && !winner;
+
+  const Square = ({ value, onClick }) => {
+    const getIcon = () => {
+      if (value === "x")
+        return (
+          <img
+            src={crossImg}
+            alt="X"
+            className="w-full h-full object-contain"
+          />
+        );
+      if (value === "o")
+        return (
+          <img
+            src={circleImg}
+            alt="O"
+            className="w-full h-full object-contain"
+          />
+        );
+      return null;
+    };
+
+    return (
+      <button
+        disabled={!isPlayerTurn || value || winner || pause}
+        onClick={onClick}
+        className="w-20 h-20 border-2 border-black flex items-center justify-center cursor-pointer"
+      >
+        {getIcon()}
+      </button>
+    );
+  };
+
+  const handleClick = (i) => {
+    if (!isPlayerTurn || squares[i] || pause) return;
+
+    const nextSquares = [...squares];
+    nextSquares[i] = playerSymbol;
+    setSquares(nextSquares);
+    setIsPlayerTurn(false);
+  };
+
+  useEffect(() => {
+    if (!isPlayerTurn && !winner && !pause) {
+      const timeout = setTimeout(makeAIMove, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [squares, isPlayerTurn, winner, pause]);
+
+  const makeAIMove = () => {
+    if (winner || isPlayerTurn || pause) return;
+
+    const isFirstAIMove = squares.filter((val) => val !== null).length === 1;
+    if (isFirstAIMove && squares[4] === playerSymbol) {
+      const emptyIndices = squares
+        .map((val, idx) => (val === null ? idx : null))
+        .filter((val) => val !== null);
+
+      if (emptyIndices.length > 0) {
+        const randomIndex = Math.floor(Math.random() * emptyIndices.length);
+        const moveIndex = emptyIndices[randomIndex];
+        const newSquares = [...squares];
+        newSquares[moveIndex] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+    }
+
+    const newSquares = [...squares];
+
+    if (!newSquares[4]) {
+      newSquares[4] = aiSymbol;
+      setSquares(newSquares);
+      setIsPlayerTurn(true);
+      return;
+    }
+
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let [a, b, c] of lines) {
+      if (
+        newSquares[a] === aiSymbol &&
+        newSquares[c] === aiSymbol &&
+        !newSquares[b]
+      ) {
+        newSquares[b] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+      if (
+        newSquares[a] === aiSymbol &&
+        newSquares[b] === aiSymbol &&
+        !newSquares[c]
+      ) {
+        newSquares[c] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+      if (
+        newSquares[c] === aiSymbol &&
+        newSquares[b] === aiSymbol &&
+        !newSquares[a]
+      ) {
+        newSquares[a] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+    }
+
+    for (let [a, b, c] of lines) {
+      if (
+        newSquares[a] === playerSymbol &&
+        newSquares[b] === playerSymbol &&
+        !newSquares[c]
+      ) {
+        newSquares[c] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+      if (
+        newSquares[a] === playerSymbol &&
+        newSquares[c] === playerSymbol &&
+        !newSquares[b]
+      ) {
+        newSquares[b] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+      if (
+        newSquares[b] === playerSymbol &&
+        newSquares[c] === playerSymbol &&
+        !newSquares[a]
+      ) {
+        newSquares[a] = aiSymbol;
+        setSquares(newSquares);
+        setIsPlayerTurn(true);
+        return;
+      }
+    }
+
+    const empty = newSquares.findIndex((val) => val === null);
+    if (empty !== -1) {
+      newSquares[empty] = aiSymbol;
+    }
+
+    setSquares(newSquares);
+    setIsPlayerTurn(true);
+  };
+
+  let status;
+  if (winner) {
+    status = `Winner: ${winner === playerSymbol ? "Player" : "Computer"}`;
+  } else if (isDraw) {
+    status = "Draw!";
+  } else {
+    status = `Turn: ${isPlayerTurn ? "Player" : "Computer"}`;
+  }
+
+  const handlePause = () => {
+    setPause(true);
+  };
+
+  const handleRestart = () => {
+    setSquares(Array(9).fill(null));
+    setPause(false);
+    setIsPlayerTurn(playerSymbol === "x");
+    onRestart?.();
+  };
+
+  const handleExit = () => {
+    setSquares(Array(9).fill(null));
+    setPause(false);
+    setIsPlayerTurn(playerSymbol === "x");
+    onExit?.()
+  };
+
+  return (
+    <section className="fixed bg-[url('/img/pixelbg.png')] bg-cover bg-center w-full h-screen justify-center items-center">
+      <div
+        className={`${
+          pause ? "visible opacity-100" : "invisible opacity-0"
+        }  min-h-screen w-full px-20 fixed flex justify-center items-center bg-black/80 transition duration-300 overflow-hidden z-50`}
+      >
+        <button
+          className="absolute top-20 right-2 text-white text-5xl bg-white-600 px-2  hover:text-gray-400 transition duration-300 cursor-pointer"
+          onClick={() => setPause(false)}
+        >
+          &times;
+        </button>
+        <div>
+          <button
+            onClick={handleRestart}
+            className="block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+          >
+            <img
+              src="img/Restart.png"
+              className=" max-w-[400px] min-w-[80px] mx-auto pointer-events-none"
+            />
+          </button>
+          <button
+            onClick={handleExit}
+            className="block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+          >
+            <img
+              src="img/Exit.png"
+              className=" max-w-[400px] min-w-[80px] mx-auto pointer-events-none"
+            />
+          </button>
+        </div>
+      </div>
+      <div className="w-full mx-auto px-4">
+        <div className="flex justify-between items-center py-10">
+          <img
+            src="img/TTTR.png"
+            className=" max-w-[300px] min-w-[100px] mx-auto"
+          />
+          <button
+            onClick={() => setPause(true)}
+            className={`text-3xl cursor-pointer transition duration-300 ${
+              pause ? "invisible opacity-0" : "visible opacity-100"
+            }`}
+          >
+            <i className="flex fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <div className="flex">
+        <div className="block mx-auto">
+          <div className="border-10 border-gray-500 bg-gray-900 max-w-[260px] mx-auto">
+            <div className="flex">
+              <Square value={squares[0]} onClick={() => handleClick(0)} />
+              <Square value={squares[1]} onClick={() => handleClick(1)} />
+              <Square value={squares[2]} onClick={() => handleClick(2)} />
+            </div>
+            <div className="flex">
+              <Square value={squares[3]} onClick={() => handleClick(3)} />
+              <Square value={squares[4]} onClick={() => handleClick(4)} />
+              <Square value={squares[5]} onClick={() => handleClick(5)} />
+            </div>
+            <div className="flex">
+              <Square value={squares[6]} onClick={() => handleClick(6)} />
+              <Square value={squares[7]} onClick={() => handleClick(7)} />
+              <Square value={squares[8]} onClick={() => handleClick(8)} />
+            </div>
+          </div>
+          <div className="mx-auto text-center lilita-one-regular text-yellow-500 text-5xl text-stroke">
+            {status}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
