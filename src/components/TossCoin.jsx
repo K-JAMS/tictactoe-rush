@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Home } from "./Home";
-import coinhead from "/img/coin/head.png";
-import cointail from "/img/coin/tail.png";
+import coinhead from "/img/coin/head.avif";
+import cointail from "/img/coin/tail.avif";
 import headflip from "/img/coin/Heads.gif";
 import tailflip from "/img/coin/Tails.gif";
 
