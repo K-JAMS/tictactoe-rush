@@ -19,7 +19,7 @@ export const Home = () => {
   };
 
   return (
-    <section className="w-full min-w-[150px] mx-auto h-screen fixed z-0 bg-[url('/img/pixelbg.avif')] bg-cover bg-center">
+    <section className="w-full min-w-[150px] mx-auto h-screen fixed z-0 bg-[url('https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/pixelbg.avif')] bg-cover bg-center">
       {start && <TossCoin onFinish={handleCoinFinish} />}
 
       {showGame && (
@@ -45,7 +45,7 @@ export const Home = () => {
         <>
           <div className="flex items-center justify-center py-20">
             <img
-              src="img/TTTR.avif"
+              src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
               className=" max-w-[400px] min-w-[100px] mx-auto pointer-events-none"
             />
           </div>

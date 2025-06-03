@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Home } from "./Home";
-import coinhead from "/img/coin/head.avif";
-import cointail from "/img/coin/tail.avif";
-import headflip from "/img/coin/Heads.gif";
-import tailflip from "/img/coin/Tails.gif";
 
-export const TossCoin = ({onFinish}) => {
+const coinhead =
+  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/main/assets/images/coins/head.avif";
+const cointail =
+  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/tail.avif";
+const headflip =
+  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Heads.gif";
+  const tailflip =
+    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Tails.gif";
+
+export const TossCoin = ({ onFinish }) => {
   const [step, setStep] = useState("idle");
   const [image, setImage] = useState(coinhead);
   const [isCoin, setIsCoin] = useState(null);
@@ -14,28 +19,25 @@ export const TossCoin = ({onFinish}) => {
     setImage(coinhead);
     setStep("preparing");
     setTimeout(() => {
-        const random = Math.floor(Math.random() * 2) + 1;
-        setIsCoin(random);
-        setStep("flip");
+      const random = Math.floor(Math.random() * 2) + 1;
+      setIsCoin(random);
+      setStep("flip");
 
-        const firstImage =
-          random === 1 ? headflip : tailflip;
-        const secondImage =
-          random === 2 ? cointail : coinhead;
+      const firstImage = random === 1 ? headflip : tailflip;
+      const secondImage = random === 2 ? cointail : coinhead;
 
-        setImage(firstImage);
+      setImage(firstImage);
+
+      setTimeout(() => {
+        setImage(secondImage);
+        setStep("landed");
 
         setTimeout(() => {
-          setImage(secondImage);
-          setStep("landed");
-          
-          setTimeout(() => {
-            setStep("idle");
-            setImage(coinhead);
-            onFinish(random);
-          }, 1000);
-        }, 2000);
-    }, 0)
+          setStep("idle");
+          onFinish(random);
+        }, 1000);
+      }, 2000);
+    }, 0);
   };
 
   return (
@@ -49,6 +51,7 @@ export const TossCoin = ({onFinish}) => {
         <img
           src={image}
           alt="Displayed"
+          loading="lazy"
           className={`w-64 object-contain pointer-events-none m-auto ${
             step === "flip" ? "flipping" : ""
           }`}

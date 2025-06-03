@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import circleImg from "/img/Circle.avif";
-import crossImg from "/img/Cross.avif";
+
+const circleImg =
+  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Circle.avif";
+  const crossImg =
+    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Cross.avif";
 
 export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const playerSymbol = parseInt(result) === 1 ? "x" : "o";
@@ -44,6 +47,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           <img
             src={crossImg}
             alt="X"
+            loading="lazy"
             className="w-full h-full object-contain"
           />
         );
@@ -52,6 +56,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           <img
             src={circleImg}
             alt="O"
+            loading="lazy"
             className="w-full h-full object-contain"
           />
         );
@@ -228,7 +233,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   };
 
   return (
-    <section className="fixed bg-[url('/img/pixelbg.avif')] bg-cover bg-center w-full h-screen justify-center items-center">
+    <section className="fixed w-full h-screen justify-center items-center">
       <div
         className={`${
           pause ? "visible opacity-100" : "invisible opacity-0"
@@ -258,7 +263,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       <div className="w-full mx-auto px-4">
         <div className="flex justify-between items-center py-10">
           <img
-            src="img/TTTR.avif"
+            src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
             className=" max-w-[300px] min-w-[100px] mx-auto pointer-events-none"
           />
           <button
