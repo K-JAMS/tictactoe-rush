@@ -51,7 +51,6 @@ export const TossCoin = ({ onFinish }) => {
         <img
           src={image}
           alt="Displayed"
-          loading="lazy"
           className={`w-64 object-contain pointer-events-none m-auto ${
             step === "flip" ? "flipping" : ""
           }`}

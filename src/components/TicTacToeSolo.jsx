@@ -47,7 +47,6 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           <img
             src={crossImg}
             alt="X"
-            loading="lazy"
             className="w-full h-full object-contain"
           />
         );
@@ -56,7 +55,6 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           <img
             src={circleImg}
             alt="O"
-            loading="lazy"
             className="w-full h-full object-contain"
           />
         );
