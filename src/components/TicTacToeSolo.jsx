@@ -4,7 +4,7 @@ import crossImg from "../assets/images/Cross.avif";
 import circleImg from "../assets/images/Circle.avif";
 
 export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
-  const [currentResult, setCurrentResult] = useState (result);
+  const [currentResult, setCurrentResult] = useState(result);
   const playerSymbol = parseInt(currentResult) === 1 ? "x" : "o";
   const aiSymbol = playerSymbol === "x" ? "o" : "x";
   const [squares, setSquares] = useState(Array(9).fill(null));
@@ -13,8 +13,9 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [resetKey, setResetKey] = useState(0);
   const count = 8;
   const [countdown, setCountdown] = useState(count);
-
-
+  const [baseTimeLeft,setBaseTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(baseTimeLeft);
+  const [score, setScore] = useState(0);
 
   const calculateWinner = (squares) => {
     const winningPatterns = [
@@ -101,19 +102,23 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         }, 1000);
         return () => clearTimeout(timer);
       } else {
-
         setIsPlayerTurn(false);
-        setCountdown(count );
+        setCountdown(count);
       }
     }
   }, [countdown, pause, isPlayerTurn, resetKey]);
 
   useEffect(() => {
     if (winner || isDraw) {
+      if (winner === playerSymbol) {
+        setScore((prev) => prev + 100);
+        setTimeLeft((prev) => prev + 5);
+      }
+
       const timeout = setTimeout(() => {
         setPause(false);
         setSquares(Array(9).fill(null));
-        
+
         setCurrentResult((prev) => (parseInt(prev) === 1 ? 2 : 1));
         setIsPlayerTurn((prev) => !(parseInt(currentResult) === 1));
         setCountdown(count);
@@ -122,7 +127,22 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
       return () => clearTimeout(timeout);
     }
-  });
+  }, [winner, isDraw]);
+
+  useEffect(() => {
+    if (pause) return;
+
+    if (timeLeft <= 0) {
+      setPause(true);
+      return;
+    }
+
+    const timeLefttimer = setTimeout(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timeLefttimer);
+  }, [timeLeft, pause]);
 
   const makeAIMove = () => {
     if (winner || isPlayerTurn || pause) return;
@@ -241,8 +261,10 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   };
 
   let status;
+  let currentScore;
   if (winner) {
     status = `Winner: ${winner === playerSymbol ? "Player" : "Computer"}`;
+    currentScore = `${winner === playerSymbol ? score + 100 : score - 100}`;
   } else if (isDraw) {
     status = "Draw!";
   } else {
@@ -275,31 +297,44 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         }  min-h-screen w-full px-20 fixed flex justify-center items-center bg-black/80 transition duration-300 overflow-hidden z-50`}
       >
         <div>
-          <h1 className="text-6xl text-yellow-500 lilita-one-regular block mx-auto cursor-default text-stroke-white">
-            Paused
-          </h1>
-          <button
-            onClick={() => setPause(false)}
-            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+          <h1
+            className={`text-5xl text-center lilita-one-regular block mx-auto cursor-default text-stroke-white ${
+              timeLeft === 0 ? "text-red-600" : "text-yellow-500"
+            }`}
           >
-            Resume
-          </button>
+            {timeLeft === 0 ? "Game Over" : "Paused"}
+          </h1>
+
+          {timeLeft > 0 && (
+            <button
+              onClick={() => setPause(false)}
+              className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            >
+              Resume
+            </button>
+          )}
+          {timeLeft <= 0 && (
+            <h1 className="text-4xl text-yellow-600 text-center lilita-one-regular block mx-auto text-stroke-white">
+              You got {score}pts!
+            </h1>
+          )}
+
           <button
             onClick={handleRestart}
-            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
           >
             Restart
           </button>
           <button
             onClick={handleExit}
-            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
           >
             Exit Game
           </button>
         </div>
       </div>
       <div className="w-full mx-auto px-4">
-        <div className="flex justify-between items-center py-10">
+        <div className="flex justify-between items-center py-0">
           <img
             src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
             className=" max-w-[300px] min-w-[100px] mx-auto pointer-events-none"
@@ -316,6 +351,19 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       </div>
       <div className="flex">
         <div className="block mx-auto">
+          <div
+            className={`${
+              timeLeft <= 10 ? "text-red-500" : "text-white"
+            } text-3xl max-w-[260px] mx-auto lilita-one-regular text-shadow-lg/30`}
+          >
+            {timeLeft}
+            <span className="text-xl">secs left</span>
+          </div>
+          <div
+            className={`text-3xl text-yellow-400 text-stroke-black max-w-[260px] mx-auto lilita-one-regular text-shadow-lg/30`}
+          >
+            Score: {score}
+          </div>
           <div className="border-10 border-gray-500 bg-gray-900 max-w-[260px] mx-auto">
             <div className="flex">
               <Square value={squares[0]} onClick={() => handleClick(0)} />
