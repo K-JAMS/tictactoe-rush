@@ -1,40 +1,35 @@
 import "../App.css";
 import React, { useEffect, useState } from "react";
 import "../index.css";
+import TTTRLogo from "../assets/images/TTTR.avif";
+import Cross from "../assets/images/Cross.avif";
+import Circle from "../assets/images/Circle.avif";
+import PixelBg from "../assets/images/pixelbg.avif";
+import Head from "../assets/images/coins/head.avif";
+import Tail from "../assets/images/coins/tail.avif";
+import HeadsGif from "../assets/images/coins/Heads.gif";
+import TailsGif from "../assets/images/coins/Tails.gif";
 
 export const LoadingScreen = ({ onComplete }) => {
-  const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+      const images = [TTTRLogo, PixelBg, Cross, Circle, Head, Tail, HeadsGif, TailsGif];
 
-  const imagesToPreload = [
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/main/assets/images/coins/head.avif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/tail.avif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Heads.gif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Tails.gif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Circle.avif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Cross.avif",
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif",
-  ];
+      images.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
 
-  useEffect(() => {
-    let loadedCount = 0;
+      const timeout = setTimeout(() => {
+        onComplete();
+      }, 2000);
 
-    imagesToPreload.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === imagesToPreload.length) {
-          setLoaded(true);
-          setTimeout(onComplete, 2000);
-        }
-      };
-    });
-  }, [onComplete]);
+      return () => clearTimeout(timeout);
+    }, [onComplete]);
 
   return (
     <div className="fixed inset-0 z-50 bg-gradient-to-b from-blue-200 to-green-800 flex flex-col items-center justify-center">
       <img
-        src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
+        src={TTTRLogo}
         alt="Logo"
         className="max-w-[300px]"
       />

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const circleImg =
-  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Circle.avif";
-  const crossImg =
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/Cross.avif";
+import crossImg from "../assets/images/Cross.avif";
+import circleImg from "../assets/images/Circle.avif";
 
 export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const playerSymbol = parseInt(result) === 1 ? "x" : "o";

@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import { Home } from "./Home";
 
-const coinhead =
-  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/main/assets/images/coins/head.avif";
-const cointail =
-  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/tail.avif";
-const headflip =
-  "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Heads.gif";
-  const tailflip =
-    "https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/coins/Tails.gif";
+import coinhead from "../assets/images/coins/head.avif";
+import cointail from "../assets/images/coins/tail.avif";
+import headflip from "../assets/images/coins/Heads.gif";
+import tailflip from "../assets/images/coins/Tails.gif";
 
 export const TossCoin = ({ onFinish }) => {
   const [step, setStep] = useState("idle");
@@ -39,6 +35,7 @@ export const TossCoin = ({ onFinish }) => {
       }, 2000);
     }, 0);
   };
+  
 
   return (
     <section className="min-w-[150px] mx-auto my-auto">
