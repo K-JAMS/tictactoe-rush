@@ -10,6 +10,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isPlayerTurn, setIsPlayerTurn] = useState(playerSymbol === "x");
   const [pause, setPause] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
   const count = 8;
   const [countdown, setCountdown] = useState(count);
 
@@ -105,18 +106,18 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         setCountdown(count );
       }
     }
-  }, [countdown, pause, isPlayerTurn]);
+  }, [countdown, pause, isPlayerTurn, resetKey]);
 
   useEffect(() => {
     if (winner || isDraw) {
       const timeout = setTimeout(() => {
         setPause(false);
         setSquares(Array(9).fill(null));
-
-        const newResult = parseInt(currentResult) === 1 ? 2 : 1;
-        setCurrentResult(newResult);
-        setIsPlayerTurn(newResult === 1);
+        
+        setCurrentResult((prev) => (parseInt(prev) === 1 ? 2 : 1));
+        setIsPlayerTurn((prev) => !(parseInt(currentResult) === 1));
         setCountdown(count);
+        setResetKey((prev) => prev + 1);
       }, 1000);
 
       return () => clearTimeout(timeout);
