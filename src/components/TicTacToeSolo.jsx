@@ -4,11 +4,16 @@ import crossImg from "../assets/images/Cross.avif";
 import circleImg from "../assets/images/Circle.avif";
 
 export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
-  const playerSymbol = parseInt(result) === 1 ? "x" : "o";
+  const [currentResult, setCurrentResult] = useState (result);
+  const playerSymbol = parseInt(currentResult) === 1 ? "x" : "o";
   const aiSymbol = playerSymbol === "x" ? "o" : "x";
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isPlayerTurn, setIsPlayerTurn] = useState(playerSymbol === "x");
   const [pause, setPause] = useState(false);
+  const count = 8;
+  const [countdown, setCountdown] = useState(count);
+
+
 
   const calculateWinner = (squares) => {
     const winningPatterns = [
@@ -77,6 +82,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
     nextSquares[i] = playerSymbol;
     setSquares(nextSquares);
     setIsPlayerTurn(false);
+    setCountdown(count);
   };
 
   useEffect(() => {
@@ -85,6 +91,37 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       return () => clearTimeout(timeout);
     }
   }, [squares, isPlayerTurn, winner, pause]);
+
+  useEffect(() => {
+    if (!pause && isPlayerTurn) {
+      if (countdown > 0) {
+        const timer = setTimeout(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+        return () => clearTimeout(timer);
+      } else {
+
+        setIsPlayerTurn(false);
+        setCountdown(count );
+      }
+    }
+  }, [countdown, pause, isPlayerTurn]);
+
+  useEffect(() => {
+    if (winner || isDraw) {
+      const timeout = setTimeout(() => {
+        setPause(false);
+        setSquares(Array(9).fill(null));
+
+        const newResult = parseInt(currentResult) === 1 ? 2 : 1;
+        setCurrentResult(newResult);
+        setIsPlayerTurn(newResult === 1);
+        setCountdown(count);
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  });
 
   const makeAIMove = () => {
     if (winner || isPlayerTurn || pause) return;
@@ -102,6 +139,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         newSquares[moveIndex] = aiSymbol;
         setSquares(newSquares);
         setIsPlayerTurn(true);
+        setCountdown(count);
         return;
       }
     }
@@ -225,7 +263,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
     setSquares(Array(9).fill(null));
     setPause(false);
     setIsPlayerTurn(playerSymbol === "x");
-    onExit?.()
+    onExit?.();
   };
 
   return (
@@ -235,24 +273,27 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           pause ? "visible opacity-100" : "invisible opacity-0"
         }  min-h-screen w-full px-20 fixed flex justify-center items-center bg-black/80 transition duration-300 overflow-hidden z-50`}
       >
-        <button
-          className="absolute top-20 right-2 text-white text-5xl bg-white-600 px-2  hover:text-gray-400 transition duration-300 cursor-pointer"
-          onClick={() => setPause(false)}
-        >
-          &times;
-        </button>
         <div>
+          <h1 className="text-6xl text-yellow-500 lilita-one-regular block mx-auto cursor-default text-stroke-white">
+            Paused
+          </h1>
+          <button
+            onClick={() => setPause(false)}
+            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+          >
+            Resume
+          </button>
           <button
             onClick={handleRestart}
-            className="text-5xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
           >
             Restart
           </button>
           <button
             onClick={handleExit}
-            className="text-5xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
+            className="text-4xl text-white  lilita-one-regular block mx-auto transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 my-5 cursor-pointer"
           >
-            Exit
+            Exit Game
           </button>
         </div>
       </div>
@@ -292,6 +333,26 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
             </div>
           </div>
           <div className="mx-auto text-center lilita-one-regular text-yellow-500 text-5xl text-stroke-white">
+            {countdown > 0 && (
+              <div className="w-[200px] h-6 bg-gray-700 rounded-full mx-auto mb-6 overflow-hidden border border-white">
+                <div
+                  className={`h-full ${
+                    countdown / count > 0.65
+                      ? "bg-yellow-400"
+                      : countdown / 5 > 0.35
+                      ? "bg-orange-500"
+                      : "bg-red-500"
+                  } ${
+                    isPlayerTurn
+                      ? "transition-all duration-1000 ease-linear"
+                      : ""
+                  } `}
+                  style={{
+                    width: `${(countdown / count) * 100}%`,
+                  }}
+                ></div>
+              </div>
+            )}
             {status}
           </div>
         </div>
