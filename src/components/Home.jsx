@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TossCoin } from "./TossCoin";
 import { TicTacToeSolo } from "./TicTacToeSolo";
+import TTTRLogo from "../assets/images/TTTR.avif";
+import Cross from "../assets/images/Cross.avif";
+import Circle from "../assets/images/Circle.avif";
+import PixelBg from "../assets/images/pixelbg.avif";
+import Head from "../assets/images/coins/head.avif";
+import Tail from "../assets/images/coins/tail.avif";
+import HeadsGif from "../assets/images/coins/Heads.gif";
+import TailsGif from "../assets/images/coins/Tails.gif";
 
 export const Home = () => {
   const [start, setStart] = useState(false);
   const [showGame, setShowGame] = useState(false);
   const [coinResult, setCoinResult] = useState(null);
+  useEffect(() => {
+    const images = [
+      TTTRLogo,
+      PixelBg,
+      Cross,
+      Circle,
+      Head,
+      Tail,
+      HeadsGif,
+      TailsGif,
+    ];
+
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   const handleClick = () => {
     setStart(true);
@@ -19,7 +44,10 @@ export const Home = () => {
   };
 
   return (
-    <section className="w-full min-w-[150px] mx-auto h-screen fixed z-0 bg-[url('https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/pixelbg.avif')] bg-cover bg-center">
+    <section
+      className={`w-full min-w-[150px] mx-auto h-screen fixed z-0 bg-cover bg-center`}
+      style={{ backgroundImage: `url(${PixelBg})` }}
+    >
       {start && <TossCoin onFinish={handleCoinFinish} />}
 
       {showGame && (
@@ -45,7 +73,7 @@ export const Home = () => {
         <>
           <div className="flex items-center justify-center py-20">
             <img
-              src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
+              src={TTTRLogo}
               className=" max-w-[400px] min-w-[100px] mx-auto pointer-events-none"
             />
           </div>

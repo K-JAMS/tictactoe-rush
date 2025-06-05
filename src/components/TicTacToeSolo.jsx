@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import TTTRLogo from "../assets/images/TTTR.avif";
 import crossImg from "../assets/images/Cross.avif";
 import circleImg from "../assets/images/Circle.avif";
 
@@ -11,12 +11,16 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [isPlayerTurn, setIsPlayerTurn] = useState(playerSymbol === "x");
   const [pause, setPause] = useState(false);
   const [resetKey, setResetKey] = useState(0);
-  const count = 8;
+  const [count, setCount] = useState(10);
   const [countdown, setCountdown] = useState(count);
-  const [baseTimeLeft,setBaseTimeLeft] = useState(60);
+  const [baseTimeLeft, setBaseTimeLeft] = useState(60);
   const [timeLeft, setTimeLeft] = useState(baseTimeLeft);
   const [score, setScore] = useState(0);
-
+  const [level, setLevel] = useState(0);
+  const [bonusTime,setBonusTime] = useState(false);
+  const [aiAtk, setAiAtk] = useState(false);
+  
+  
   const calculateWinner = (squares) => {
     const winningPatterns = [
       [0, 1, 2],
@@ -112,7 +116,11 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
     if (winner || isDraw) {
       if (winner === playerSymbol) {
         setScore((prev) => prev + 100);
-        setTimeLeft((prev) => prev + 5);
+        setTimeLeft((prev) => prev + 20);
+        setBonusTime(true);
+      } else if (winner === aiSymbol) {
+        setTimeLeft((prev) => prev - (level + 5));
+        setAiAtk(true);
       }
 
       const timeout = setTimeout(() => {
@@ -123,6 +131,8 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         setIsPlayerTurn((prev) => !(parseInt(currentResult) === 1));
         setCountdown(count);
         setResetKey((prev) => prev + 1);
+        setBonusTime(false);
+        setAiAtk(false);
       }, 1000);
 
       return () => clearTimeout(timeout);
@@ -143,6 +153,24 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
     return () => clearTimeout(timeLefttimer);
   }, [timeLeft, pause]);
+
+  useEffect(() => {
+    if (score > 3150) {
+      setLevel(4);
+    } else if (score > 2150) {
+      setLevel(3);
+    } else if (score > 1250) {
+      setLevel(2);
+    } else if (score > 550) {
+      setLevel(1);
+    } else {
+      setLevel(0);
+    }
+  }, [score]);
+
+  useEffect(() => {
+    setCount(10 - level * 2);
+  }, [level]);
 
   const makeAIMove = () => {
     if (winner || isPlayerTurn || pause) return;
@@ -167,7 +195,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
     const newSquares = [...squares];
 
-    if (!newSquares[4]) {
+    if (level >= 3 && !newSquares[4]) {
       newSquares[4] = aiSymbol;
       setSquares(newSquares);
       setIsPlayerTurn(true);
@@ -251,9 +279,14 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       }
     }
 
-    const empty = newSquares.findIndex((val) => val === null);
-    if (empty !== -1) {
-      newSquares[empty] = aiSymbol;
+    const emptyIndices = newSquares
+      .map((val, idx) => (val === null ? idx : null))
+      .filter((val) => val !== null);
+
+    if (emptyIndices.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyIndices.length);
+      const moveIndex = emptyIndices[randomIndex];
+      newSquares[moveIndex] = aiSymbol;
     }
 
     setSquares(newSquares);
@@ -299,10 +332,10 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         <div>
           <h1
             className={`text-5xl text-center lilita-one-regular block mx-auto cursor-default text-stroke-white ${
-              timeLeft === 0 ? "text-red-600" : "text-yellow-500"
+              timeLeft <= 0 ? "text-red-600" : "text-yellow-500"
             }`}
           >
-            {timeLeft === 0 ? "Game Over" : "Paused"}
+            {timeLeft <= 0 ? "Game Over" : "Paused"}
           </h1>
 
           {timeLeft > 0 && (
@@ -336,7 +369,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       <div className="w-full mx-auto px-4">
         <div className="flex justify-between items-center py-0">
           <img
-            src="https://raw.githubusercontent.com/janrelsaves/tttr-imgs/refs/heads/main/assets/images/TTTR.avif"
+            src={TTTRLogo}
             className=" max-w-[300px] min-w-[100px] mx-auto pointer-events-none"
           />
           <button
@@ -358,6 +391,12 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           >
             {timeLeft}
             <span className="text-xl">secs left</span>
+            {bonusTime && (
+              <span className="show-fade text-yellow-400"> +20</span>
+            )}
+            {aiAtk && (
+              <span className="show-fade text-red-500"> -{level + 5}</span>
+            )}
           </div>
           <div
             className={`text-3xl text-yellow-400 text-stroke-black max-w-[260px] mx-auto lilita-one-regular text-shadow-lg/30`}
