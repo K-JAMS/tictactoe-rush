@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import TTTRLogo from "../assets/images/TTTR.avif";
 import crossImg from "../assets/images/Cross.avif";
 import circleImg from "../assets/images/Circle.avif";
+import ChicFront from "../assets/images/ChichicFront.gif";
+import ChicBack from "../assets/images/ChichicBack.gif";
+
 
 export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [currentResult, setCurrentResult] = useState(result);
@@ -17,10 +20,10 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [timeLeft, setTimeLeft] = useState(baseTimeLeft);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(0);
-  const [bonusTime,setBonusTime] = useState(false);
+  const [bonusTime, setBonusTime] = useState(false);
   const [aiAtk, setAiAtk] = useState(false);
-  
-  
+  const [combo, setCombo] = useState(0);
+
   const calculateWinner = (squares) => {
     const winningPatterns = [
       [0, 1, 2],
@@ -106,6 +109,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         }, 1000);
         return () => clearTimeout(timer);
       } else {
+        setCombo(0);
         setIsPlayerTurn(false);
         setCountdown(count);
       }
@@ -115,12 +119,16 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   useEffect(() => {
     if (winner || isDraw) {
       if (winner === playerSymbol) {
-        setScore((prev) => prev + 100);
-        setTimeLeft((prev) => prev + 20);
+        setScore((prev) => prev + 100 + (combo * 5));
+        setTimeLeft((prev) => prev + 10 + (combo * 5));
         setBonusTime(true);
-      } else if (winner === aiSymbol) {
-        setTimeLeft((prev) => prev - (level + 5));
-        setAiAtk(true);
+        setCombo((prev) => prev + 1);
+      } else {
+        setCombo(0);
+        if (winner === aiSymbol) {
+          setTimeLeft((prev) => prev - (level * 5));
+          setAiAtk(true);
+        }
       }
 
       const timeout = setTimeout(() => {
@@ -155,11 +163,11 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   }, [timeLeft, pause]);
 
   useEffect(() => {
-    if (score > 3150) {
+    if (score > 2000) {
       setLevel(4);
-    } else if (score > 2150) {
+    } else if (score > 1500) {
       setLevel(3);
-    } else if (score > 1250) {
+    } else if (score > 1000) {
       setLevel(2);
     } else if (score > 550) {
       setLevel(1);
@@ -175,21 +183,23 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const makeAIMove = () => {
     if (winner || isPlayerTurn || pause) return;
 
-    const isFirstAIMove = squares.filter((val) => val !== null).length === 1;
-    if (isFirstAIMove && squares[4] === playerSymbol) {
-      const emptyIndices = squares
-        .map((val, idx) => (val === null ? idx : null))
-        .filter((val) => val !== null);
+    if (level >= 3) {
+      const isFirstAIMove = squares.filter((val) => val !== null).length === 1;
+      if (isFirstAIMove && squares[4] === playerSymbol) {
+        const emptyIndices = squares
+          .map((val, idx) => (val === null ? idx : null))
+          .filter((val) => val !== null);
 
-      if (emptyIndices.length > 0) {
-        const randomIndex = Math.floor(Math.random() * emptyIndices.length);
-        const moveIndex = emptyIndices[randomIndex];
-        const newSquares = [...squares];
-        newSquares[moveIndex] = aiSymbol;
-        setSquares(newSquares);
-        setIsPlayerTurn(true);
-        setCountdown(count);
-        return;
+        if (emptyIndices.length > 0) {
+          const randomIndex = Math.floor(Math.random() * emptyIndices.length);
+          const moveIndex = emptyIndices[randomIndex];
+          const newSquares = [...squares];
+          newSquares[moveIndex] = aiSymbol;
+          setSquares(newSquares);
+          setIsPlayerTurn(true);
+          setCountdown(count);
+          return;
+        }
       }
     }
 
@@ -200,6 +210,23 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       setSquares(newSquares);
       setIsPlayerTurn(true);
       return;
+    }
+    if (level < 3) {
+      const aiMovesCount = newSquares.filter((s) => s === aiSymbol).length;
+
+      if (aiMovesCount === 0) {
+        const sideSquares = [1, 3, 5, 7];
+        const available = sideSquares.filter((index) => !newSquares[index]);
+
+        if (available.length > 0) {
+          const randomIndex =
+            available[Math.floor(Math.random() * available.length)];
+          newSquares[randomIndex] = aiSymbol;
+          setSquares(newSquares);
+          setIsPlayerTurn(true);
+          return;
+        }
+      }
     }
 
     const lines = [
@@ -246,36 +273,38 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
       }
     }
 
-    for (let [a, b, c] of lines) {
-      if (
-        newSquares[a] === playerSymbol &&
-        newSquares[b] === playerSymbol &&
-        !newSquares[c]
-      ) {
-        newSquares[c] = aiSymbol;
-        setSquares(newSquares);
-        setIsPlayerTurn(true);
-        return;
-      }
-      if (
-        newSquares[a] === playerSymbol &&
-        newSquares[c] === playerSymbol &&
-        !newSquares[b]
-      ) {
-        newSquares[b] = aiSymbol;
-        setSquares(newSquares);
-        setIsPlayerTurn(true);
-        return;
-      }
-      if (
-        newSquares[b] === playerSymbol &&
-        newSquares[c] === playerSymbol &&
-        !newSquares[a]
-      ) {
-        newSquares[a] = aiSymbol;
-        setSquares(newSquares);
-        setIsPlayerTurn(true);
-        return;
+    if (level >= 1) {
+      for (let [a, b, c] of lines) {
+        if (
+          newSquares[a] === playerSymbol &&
+          newSquares[b] === playerSymbol &&
+          !newSquares[c]
+        ) {
+          newSquares[c] = aiSymbol;
+          setSquares(newSquares);
+          setIsPlayerTurn(true);
+          return;
+        }
+        if (
+          newSquares[a] === playerSymbol &&
+          newSquares[c] === playerSymbol &&
+          !newSquares[b]
+        ) {
+          newSquares[b] = aiSymbol;
+          setSquares(newSquares);
+          setIsPlayerTurn(true);
+          return;
+        }
+        if (
+          newSquares[b] === playerSymbol &&
+          newSquares[c] === playerSymbol &&
+          !newSquares[a]
+        ) {
+          newSquares[a] = aiSymbol;
+          setSquares(newSquares);
+          setIsPlayerTurn(true);
+          return;
+        }
       }
     }
 
@@ -296,12 +325,12 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   let status;
   let currentScore;
   if (winner) {
-    status = `Winner: ${winner === playerSymbol ? "Player" : "Computer"}`;
+    status = `Winner: ${winner === playerSymbol ? "Player" : "Chic Chic"}`;
     currentScore = `${winner === playerSymbol ? score + 100 : score - 100}`;
   } else if (isDraw) {
     status = "Draw!";
   } else {
-    status = `Turn: ${isPlayerTurn ? "Player" : "Computer"}`;
+    status = `${isPlayerTurn ? "Player's" : "Chic Chic's"} Turn`;
   }
 
   const handlePause = () => {
@@ -324,6 +353,11 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
   return (
     <section className="fixed w-full h-screen justify-center items-center">
+      <div
+        className={`fixed w-screen h-screen bg-black z-10 transition duration-300 ${
+          combo >= 2 ? "visible opacity-75" : "invisible opacity-0"
+        }`}
+      ></div>
       <div
         className={`${
           pause ? "visible opacity-100" : "invisible opacity-0"
@@ -370,11 +404,11 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         <div className="flex justify-between items-center py-0">
           <img
             src={TTTRLogo}
-            className=" max-w-[300px] min-w-[100px] mx-auto pointer-events-none"
+            className="max-w-[300px] min-w-[100px] mx-auto pointer-events-none z-30"
           />
           <button
-            onClick={() => setPause(true)}
-            className={`text-3xl cursor-pointer transition duration-300 ${
+            onClick={handlePause}
+            className={`text-3xl cursor-pointer transition duration-300 z-30 ${
               pause ? "invisible opacity-0" : "visible opacity-100"
             }`}
           >
@@ -383,7 +417,7 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
         </div>
       </div>
       <div className="flex">
-        <div className="block mx-auto">
+        <div className="block mx-auto z-20">
           <div
             className={`${
               timeLeft <= 10 ? "text-red-500" : "text-white"
@@ -392,18 +426,30 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
             {timeLeft}
             <span className="text-xl">secs left</span>
             {bonusTime && (
-              <span className="show-fade text-yellow-400"> +20</span>
+              <span className="show-fade text-yellow-400">
+                + {10 + (combo - 1) * 5}
+              </span>
             )}
             {aiAtk && (
-              <span className="show-fade text-red-500"> -{level + 5}</span>
+              <span className="show-fade text-red-500"> -{level * 5}</span>
             )}
           </div>
-          <div
-            className={`text-3xl text-yellow-400 text-stroke-black max-w-[260px] mx-auto lilita-one-regular text-shadow-lg/30`}
-          >
+          <div className="text-3xl text-yellow-400 text-stroke-black max-w-[260px] mx-auto lilita-one-regular text-shadow-lg/30">
             Score: {score}
           </div>
-          <div className="border-10 border-gray-500 bg-gray-900 max-w-[260px] mx-auto">
+          <div className="float-right -mt-20">
+            <img
+              className="h-[80px]"
+              src={
+                aiAtk ? ChicBack : ChicFront
+              }
+            />
+          </div>
+          <div
+            className={`border-10 border-gray-500 bg-gray-900 max-w-[260px] mx-auto ${
+              combo >= 2 ? "glow" : ""
+            }`}
+          >
             <div className="flex">
               <Square value={squares[0]} onClick={() => handleClick(0)} />
               <Square value={squares[1]} onClick={() => handleClick(1)} />
@@ -420,16 +466,19 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
               <Square value={squares[8]} onClick={() => handleClick(8)} />
             </div>
           </div>
-          <div className="mx-auto text-center lilita-one-regular text-yellow-500 text-5xl text-stroke-white">
+          <div className="mx-auto max-w-[300px] relative mt-2">
+            {combo >= 2 && (
+              <h1 className="show-fade text-blue-400 text-shadow-lg text-shadow-yellow-500 text-center lilita-one-regular text-stroke-white text-3xl absolute w-full -mt-2">
+                Combo {combo - 1}
+              </h1>
+            )}
             {countdown > 0 && (
-              <div className="w-[200px] h-6 bg-gray-700 rounded-full mx-auto mb-6 overflow-hidden border border-white">
+              <div className="max-w-[300px] h-5 bg-gray-700 rounded-full mx-auto my-1 overflow-hidden border border-white">
                 <div
                   className={`h-full ${
-                    countdown / count > 0.65
-                      ? "bg-yellow-400"
-                      : countdown / 5 > 0.35
-                      ? "bg-orange-500"
-                      : "bg-red-500"
+                    combo >= 2
+                      ? "bg-gradient-to-r from-white to-blue-400"
+                      : "bg-gradient-to-r from-red-500 to-yellow-400"
                   } ${
                     isPlayerTurn
                       ? "transition-all duration-1000 ease-linear"
@@ -441,7 +490,9 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
                 ></div>
               </div>
             )}
-            {status}
+            <div className="max-w-[300px] text-center lilita-one-regular text-yellow-500 text-3xl text-stroke-white">
+              {status}
+            </div>
           </div>
         </div>
       </div>

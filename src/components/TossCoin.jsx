@@ -53,11 +53,11 @@ export const TossCoin = ({ onFinish }) => {
           }`}
         />
         <h2
-          className={`text-center text-2xl text-black object-contain pointer-events-none m-auto lilita-one-regular ${
+          className={`text-center text-2xl text-white text-shadow-lg show-fade object-contain pointer-events-none m-auto lilita-one-regular ${
             step === "idle" ? "" : "invisible"
           }`}
         >
-          Tap Anywhere to Flip the Coin
+          Tap anywhere to Flip the Coin
         </h2>
         <h2
           className={`text-center text-5xl text-yellow-500 object-contain pointer-events-none m-auto lilita-one-regular text-stroke-white ${

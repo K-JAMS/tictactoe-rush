@@ -36,7 +36,7 @@
 
 @keyframes showFade {
   0% {
-    opacity: 0;
+    opacity: .5;
   }
   20% {
     opacity: 1;
@@ -45,9 +45,27 @@
     opacity: 1;
   }
   100% {
-    opacity: 0;
+    opacity: .5
   }
 }
+
+@keyframes glowingShadow {
+  0% {
+    box-shadow: 0 0 20px skyblue;
+  }
+  50% {
+    box-shadow: 0 0 20px yellow;
+  }
+  100% {
+    box-shadow: 0 0 20px skyblue;
+  }
+}
+
+.glow {
+  box-shadow: 0 0 20px skyblue;
+  animation: glowingShadow 1s infinite;
+}
+
 
 @layer utilities {
   @keyframes blink {

@@ -9,10 +9,13 @@ import Head from "../assets/images/coins/head.avif";
 import Tail from "../assets/images/coins/tail.avif";
 import HeadsGif from "../assets/images/coins/Heads.gif";
 import TailsGif from "../assets/images/coins/Tails.gif";
+import ChicFront from "../assets/images/ChichicFront.gif";
+import ChicBack from "../assets/images/ChichicBack.gif";
+
 
 export const LoadingScreen = ({ onComplete }) => {
     useEffect(() => {
-      const images = [TTTRLogo, PixelBg, Cross, Circle, Head, Tail, HeadsGif, TailsGif];
+      const images = [TTTRLogo, PixelBg, Cross, Circle, Head, Tail, HeadsGif, TailsGif, ChicFront, ChicBack];
 
       images.forEach((src) => {
         const img = new Image();
