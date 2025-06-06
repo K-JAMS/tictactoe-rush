@@ -19,10 +19,10 @@ export const About = ({ setAbout, playClickSound, isMuted }) => {
         </h1>
         <p className="text-black text-xs text-justify md:text-sm lg:text-md xl:text-[15px] mt-3 text-shadow-sm">
           The game was built using React components. The coin toss uses state
-          and timers to animate and determine the starting player. The Tic Tac
-          Toe board tracks moves and game state. The opponent’s moves are
-          generated using programmed strategies and conditional logic to respond
-          to the player’s moves.
+          and timers to animate and determine the starting player. The TicTacToe
+          board tracks moves and game state. The opponent’s moves are generated
+          using programmed strategies and conditional logic to respond to the
+          player’s moves.
         </p>
         <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-center pt-5 lilita-one-regular text-shadow-md text-shadow-black">
           ⚠️ Disclaimer
@@ -31,11 +31,13 @@ export const About = ({ setAbout, playClickSound, isMuted }) => {
           This game was built with the help of AI and is made for educational
           purposes to better understand React and its libraries.
         </p>
-        <p className = "mt-5 flex justify-center items-center">Created by:</p>
+        <p className="mt-5 flex justify-center items-center  text-shadow-sm">
+          Created by:
+        </p>
         <div className="flex w-full justify-center items-center">
-          <img className="max-h-[40px]" src={JamSol} />
-          <p className="text-3xl font-mono font-bold align-middle flex justify-center items-center pointer-events-none">
-            <span className=" bg-gradient-to-r from-yellow-400 to-red-400 bg-clip-text text-transparent leading-right">
+          <img className="max-h-[40px] pointer-events-none" src={JamSol} />
+          <p className="text-3xl font-mono font-bold align-middle flex justify-center items-center">
+            <span className=" bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent leading-right">
               JAM
             </span>
             <span className="text-blue-600">Solutions</span>

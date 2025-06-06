@@ -9,9 +9,9 @@ export const HowToPlay = ({ setHtp, playClickSound, isMuted}) => {
         How to Play?
       </h1>
       <p className="text-black text-center text-xs text-md:text-sm lg:text-md xl:text-[15px] text-shadow-sm py-10">
-        You and your Opponent (AI) take turns placing ❌ or ⭘ on a 3×3 grid. Win
-        by aligning 3 symbols in a row — vertically, horizontally, or
-        diagonally.
+        You and your Opponent take turns placing <i class="fa-solid fa-x"></i>{" "}
+        or <i class="fa-regular fa-circle"></i> on a 3×3 grid. Win by aligning 3
+        symbols in a row: vertically, horizontally, or diagonally.
       </p>
     </div>
   );
