@@ -34,7 +34,7 @@ export const LoadingScreen = ({ onComplete }) => {
       <img
         src={TTTRLogo}
         alt="Logo"
-        className="max-w-[300px]"
+        className="max-w-[300px] pointer-events-none"
       />
 
       <div className="w-[200px] h-[2px] bg-gray-800 rounded relative overflow-hidden">

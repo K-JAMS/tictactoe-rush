@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TTTRLogo from "../assets/images/TTTR.avif";
 import crossImg from "../assets/images/Cross.avif";
 import circleImg from "../assets/images/Circle.avif";
 import ChicFront from "../assets/images/ChichicFront.gif";
 import ChicBack from "../assets/images/ChichicBack.gif";
+import comboSound from "../assets/audio/combo.mp3";
+import loseSound from "../assets/audio/lose.mp3";
 
-
-export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
+export const TicTacToeSolo = ({
+  result,
+  onExit,
+  onRestart,
+  playClickSound,
+  isMuted,
+  setIsMuted,
+  playWinSound,
+}) => {
   const [currentResult, setCurrentResult] = useState(result);
   const playerSymbol = parseInt(currentResult) === 1 ? "x" : "o";
   const aiSymbol = playerSymbol === "x" ? "o" : "x";
@@ -23,6 +32,24 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   const [bonusTime, setBonusTime] = useState(false);
   const [aiAtk, setAiAtk] = useState(false);
   const [combo, setCombo] = useState(0);
+  const comboAudioRef = useRef(null);
+  const loseAudioRef = useRef(null);
+
+  const playComboSound = () => {
+    if (!isMuted && comboAudioRef.current) {
+      const sound = comboAudioRef.current.cloneNode();
+      sound.volume = 0.5;
+      sound.play();
+    }
+  };
+
+  const playLoseSound = () => {
+    if (!isMuted && loseAudioRef.current) {
+      const sound = loseAudioRef.current.cloneNode();
+      sound.volume = 0.5;
+      sound.play();
+    }
+  };
 
   const calculateWinner = (squares) => {
     const winningPatterns = [
@@ -86,12 +113,15 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
   const handleClick = (i) => {
     if (!isPlayerTurn || squares[i] || pause) return;
-
     const nextSquares = [...squares];
     nextSquares[i] = playerSymbol;
     setSquares(nextSquares);
     setIsPlayerTurn(false);
     setCountdown(count);
+
+    if (!isMuted && playClickSound) {
+      playClickSound();
+    }
   };
 
   useEffect(() => {
@@ -119,15 +149,19 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   useEffect(() => {
     if (winner || isDraw) {
       if (winner === playerSymbol) {
-        setScore((prev) => prev + 100 + (combo * 5));
-        setTimeLeft((prev) => prev + 10 + (combo * 5));
+        setScore((prev) => prev + 100 + combo * 5);
+        setTimeLeft((prev) => prev + 10 + combo * 5);
         setBonusTime(true);
         setCombo((prev) => prev + 1);
+        if (combo === 0){
+          playWinSound();
+        }
       } else {
         setCombo(0);
         if (winner === aiSymbol) {
-          setTimeLeft((prev) => prev - (level * 5));
+          setTimeLeft((prev) => prev - level * 5);
           setAiAtk(true);
+          playLoseSound();
         }
       }
 
@@ -179,6 +213,12 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   useEffect(() => {
     setCount(10 - level * 2);
   }, [level]);
+
+  useEffect(() => {
+    if (combo >= 2) {
+      playComboSound();
+    }
+  }, [combo]);
 
   const makeAIMove = () => {
     if (winner || isPlayerTurn || pause) return;
@@ -334,10 +374,13 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   }
 
   const handlePause = () => {
+    playClickSound();
     setPause(true);
   };
 
   const handleRestart = () => {
+    playClickSound();
+    setCombo(0);
     setSquares(Array(9).fill(null));
     setPause(false);
     setIsPlayerTurn(playerSymbol === "x");
@@ -345,6 +388,8 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
   };
 
   const handleExit = () => {
+    playClickSound();
+    setCombo(0);
     setSquares(Array(9).fill(null));
     setPause(false);
     setIsPlayerTurn(playerSymbol === "x");
@@ -353,6 +398,8 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
   return (
     <section className="fixed w-full h-screen justify-center items-center">
+      <audio ref={comboAudioRef} src={comboSound} preload="auto" />
+      <audio ref={loseAudioRef} src={loseSound} preload="auto" />
       <div
         className={`fixed w-screen h-screen bg-black z-10 transition duration-300 ${
           combo >= 2 ? "visible opacity-75" : "invisible opacity-0"
@@ -374,7 +421,10 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
 
           {timeLeft > 0 && (
             <button
-              onClick={() => setPause(false)}
+              onClick={() => {
+                setPause(false);
+                playClickSound();
+              }}
               className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
             >
               Resume
@@ -397,6 +447,21 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
             className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
           >
             Exit Game
+          </button>
+          <button
+            onClick={() => {
+              playClickSound();
+              setIsMuted(!isMuted);
+              playClickSound = { playClickSound };
+              isMuted = { isMuted };
+            }}
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:text-gray-300 cursor-pointer"
+          >
+            {isMuted ? (
+              <i class="fa-solid fa-volume-xmark"></i>
+            ) : (
+              <i class="fa-solid fa-volume-high"></i>
+            )}
           </button>
         </div>
       </div>
@@ -439,10 +504,8 @@ export const TicTacToeSolo = ({ result, onExit, onRestart }) => {
           </div>
           <div className="float-right -mt-20">
             <img
-              className="h-[80px]"
-              src={
-                aiAtk ? ChicBack : ChicFront
-              }
+              className="h-[80px] pointer-events-none"
+              src={aiAtk ? ChicBack : ChicFront}
             />
           </div>
           <div

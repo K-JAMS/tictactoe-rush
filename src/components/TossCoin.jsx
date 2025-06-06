@@ -1,17 +1,35 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Home } from "./Home";
 
 import coinhead from "../assets/images/coins/head.avif";
 import cointail from "../assets/images/coins/tail.avif";
 import headflip from "../assets/images/coins/Heads.gif";
 import tailflip from "../assets/images/coins/Tails.gif";
+import coinSound from "../assets/audio/coinflip.mp3";
+import coinDropSound from "../assets/audio/win.mp3";
 
-export const TossCoin = ({ onFinish }) => {
+export const TossCoin = ({ onFinish, isMuted }) => {
   const [step, setStep] = useState("idle");
   const [image, setImage] = useState(coinhead);
   const [isCoin, setIsCoin] = useState(null);
+  const coinAudioRef = useRef(null);
+  const dropAudioRef = useRef(null);
+
+  const playCoinSound = () => {
+    if (!isMuted && coinAudioRef.current) {
+      const sound = coinAudioRef.current.cloneNode();
+      sound.play();
+    }
+  };
+  const playDropSound = () => {
+    if (!isMuted && dropAudioRef.current) {
+      const sound = dropAudioRef.current.cloneNode();
+      sound.play();
+    }
+  };
 
   const handleFlip = () => {
+    playCoinSound();
     setImage(coinhead);
     setStep("preparing");
     setTimeout(() => {
@@ -25,6 +43,7 @@ export const TossCoin = ({ onFinish }) => {
       setImage(firstImage);
 
       setTimeout(() => {
+        playDropSound();
         setImage(secondImage);
         setStep("landed");
 
@@ -39,6 +58,8 @@ export const TossCoin = ({ onFinish }) => {
 
   return (
     <section className="min-w-[150px] mx-auto my-auto">
+      <audio ref={coinAudioRef} src={coinSound} preload="auto" />
+      <audio ref={dropAudioRef} src={coinDropSound} preload="auto" />
       <div
         onClick={handleFlip}
         className={`block items-center justify-center pt-50 ${
