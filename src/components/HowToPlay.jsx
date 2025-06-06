@@ -24,7 +24,7 @@ export const HowToPlay = ({ setHtp, playClickSound, isMuted}) => {
       <h2 className="text-md md:text-lg lg:text-xl xl:text-[25px] text-shadow-sm text-white lilita-one-regular">
         ⏱️ Time Limit
       </h2>
-      <p className="text-black text-md md:text-lg lg:text-xl xl:text-[17px] text-shadow-lg pb-3">
+      <p className="text-black text-sm md:text-md lg:text-lg xl:text-[15px] text-shadow-lg pb-3">
         You have a global timer, when it hits 0, it’s game over. You also have a
         countdown for each move. Take too long and you lose your turn! Winning
         adds time, while losing subtracts time.
@@ -32,14 +32,14 @@ export const HowToPlay = ({ setHtp, playClickSound, isMuted}) => {
       <h2 className="text-md md:text-lg lg:text-xl xl:text-[25px] text-shadow-sm text-white lilita-one-regular">
         🎯 Scoring System
       </h2>
-      <p className="text-black text-md md:text-lg lg:text-xl xl:text-[17px] text-shadow-lg pb-2">
+      <p className="text-black text-sm md:text-md lg:text-lg xl:text-[15px] text-shadow-lg pb-2">
         Each win earns 100 points plus bonus points based on your Combo. You
         lose points if the Opponent wins. A draw gives no points.
       </p>
       <h2 className="text-md md:text-lg lg:text-xl xl:text-[25px] text-shadow-sm text-white lilita-one-regular">
         🔥 Combo
       </h2>
-      <p className="text-black text-md md:text-lg lg:text-xl xl:text-[17px] text-shadow-lg pb-2">
+      <p className="text-black text-sm md:text-md lg:text-lg xl:text-[15px] text-shadow-lg pb-2">
         Winning multiple times in a row builds a Combo. Combos increase your
         bonus score and time rewards. Combo resets if you lose or draw.
       </p>
