@@ -203,7 +203,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                 }}
                 className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-white text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30"
               >
-                1v1
+                PvP
               </button>
               <button
                 onClick={() => {

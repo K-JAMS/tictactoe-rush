@@ -17,7 +17,7 @@ export const About = ({ setAbout, playClickSound, isMuted }) => {
         <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-center text-yellow-400 lilita-one-regular text-stroke-black text-shadow-md text-shadow-black">
           About
         </h1>
-        <p className="text-black text-xs text-justify md:text-sm lg:text-md xl:text-[15px] mt-3 text-shadow-sm">
+        <p className="text-black text-md text-justify md:text-lg lg:text-xl xl:text-[17px] mt-3 text-shadow-sm">
           The game was built using React components. The coin toss uses state
           and timers to animate and determine the starting player. The TicTacToe
           board tracks moves and game state. The opponent’s moves are generated
@@ -27,7 +27,7 @@ export const About = ({ setAbout, playClickSound, isMuted }) => {
         <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-center pt-5 lilita-one-regular text-shadow-md text-shadow-black">
           ⚠️ Disclaimer
         </h1>
-        <p className="text-black text-xs text-justify md:text-sm lg:text-md xl:text-[15px] mt-3 text-shadow-sm">
+        <p className="text-black text-md text-justify md:text-lg lg:text-xl xl:text-[17px] mt-3 text-shadow-sm">
           This game was built with the help of AI and is made for educational
           purposes to better understand React and its libraries.
         </p>
