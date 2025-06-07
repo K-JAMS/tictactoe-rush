@@ -177,19 +177,19 @@ export const TicTacToe = ({ onExit, playClickSound, isMuted, setIsMuted, playWin
               setPause(false);
               playClickSound();
             }}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
           >
             Resume
           </button>
           <button
             onClick={handleRestart}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
           >
             Restart
           </button>
           <button
             onClick={handleExit}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
           >
             Exit Game
           </button>
@@ -200,7 +200,7 @@ export const TicTacToe = ({ onExit, playClickSound, isMuted, setIsMuted, playWin
               playClickSound = { playClickSound };
               isMuted = { isMuted };
             }}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:text-gray-300 cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:text-gray-300 cursor-pointer active:scale-80"
           >
             {isMuted ? (
               <i class="fa-solid fa-volume-xmark"></i>
@@ -222,7 +222,7 @@ export const TicTacToe = ({ onExit, playClickSound, isMuted, setIsMuted, playWin
                 setPause(true);
                 playClickSound();
               }}
-              className={`text-3xl cursor-pointer transition duration-300 ${
+              className={`text-3xl cursor-pointer transition duration-300 active:scale-80 ${
                 pause ? "invisible opacity-0" : "visible opacity-100"
               }`}
             >

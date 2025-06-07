@@ -6,7 +6,7 @@ import cointail from "../assets/images/coins/tail.avif";
 import headflip from "../assets/images/coins/Heads.gif";
 import tailflip from "../assets/images/coins/Tails.gif";
 import coinSound from "../assets/audio/coinflip.mp3";
-import coinDropSound from "../assets/audio/win.mp3";
+import coinDropSound from "../assets/audio/coindown.mp3";
 
 export const TossCoin = ({ onFinish, isMuted }) => {
   const [step, setStep] = useState("idle");
@@ -18,12 +18,14 @@ export const TossCoin = ({ onFinish, isMuted }) => {
   const playCoinSound = () => {
     if (!isMuted && coinAudioRef.current) {
       const sound = coinAudioRef.current.cloneNode();
+      sound.volume = .8;
       sound.play();
     }
   };
   const playDropSound = () => {
     if (!isMuted && dropAudioRef.current) {
       const sound = dropAudioRef.current.cloneNode();
+      sound.volume = 0.5;
       sound.play();
     }
   };

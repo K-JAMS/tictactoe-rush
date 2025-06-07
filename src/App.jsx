@@ -52,12 +52,14 @@ function App() {
           <Home isMuted={isMuted} setIsMuted={setIsMuted} className="z-30" />
         )}
         {!isLanded && (
-          <button
-            onClick={() => setIsLanded(true)}
-            className="flex justify-center items-center text-center mx-auto h-screen text-6x text-5xl lilita-one-regular transition duration-300 ease hover:scale-110 text-stroke-black cursor-pointer show-fade"
-          >
-            Start
-          </button>
+          <div className="h-screen w-screen flex justify-center items-center">
+            <button
+              onClick={() => setIsLanded(true)}
+              className="text-center mx-auto text-6x text-5xl lilita-one-regular transition duration-300 ease hover:scale-110 text-stroke-black cursor-pointer show-fade active:scale-80"
+            >
+              Start
+            </button>
+          </div>
         )}
       </div>
     </div>

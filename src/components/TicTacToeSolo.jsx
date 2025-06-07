@@ -5,7 +5,6 @@ import circleImg from "../assets/images/Circle.avif";
 import ChicFront from "../assets/images/ChichicFront.gif";
 import ChicBack from "../assets/images/ChichicBack.gif";
 import comboSound from "../assets/audio/combo.mp3";
-import loseSound from "../assets/audio/lose.mp3";
 
 export const TicTacToeSolo = ({
   result,
@@ -15,6 +14,7 @@ export const TicTacToeSolo = ({
   isMuted,
   setIsMuted,
   playWinSound,
+  playLoseSound,
 }) => {
   const [currentResult, setCurrentResult] = useState(result);
   const playerSymbol = parseInt(currentResult) === 1 ? "x" : "o";
@@ -33,7 +33,6 @@ export const TicTacToeSolo = ({
   const [aiAtk, setAiAtk] = useState(false);
   const [combo, setCombo] = useState(0);
   const comboAudioRef = useRef(null);
-  const loseAudioRef = useRef(null);
 
   const playComboSound = () => {
     if (!isMuted && comboAudioRef.current) {
@@ -43,13 +42,6 @@ export const TicTacToeSolo = ({
     }
   };
 
-  const playLoseSound = () => {
-    if (!isMuted && loseAudioRef.current) {
-      const sound = loseAudioRef.current.cloneNode();
-      sound.volume = 0.5;
-      sound.play();
-    }
-  };
 
   const calculateWinner = (squares) => {
     const winningPatterns = [
@@ -399,7 +391,6 @@ export const TicTacToeSolo = ({
   return (
     <section className="fixed w-full h-screen justify-center items-center">
       <audio ref={comboAudioRef} src={comboSound} preload="auto" />
-      <audio ref={loseAudioRef} src={loseSound} preload="auto" />
       <div
         className={`fixed w-screen h-screen bg-black z-10 transition duration-300 ${
           combo >= 2 ? "visible opacity-75" : "invisible opacity-0"
@@ -425,7 +416,7 @@ export const TicTacToeSolo = ({
                 setPause(false);
                 playClickSound();
               }}
-              className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+              className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
             >
               Resume
             </button>
@@ -438,13 +429,13 @@ export const TicTacToeSolo = ({
 
           <button
             onClick={handleRestart}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
           >
             Restart
           </button>
           <button
             onClick={handleExit}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:-translate-y-1 hover:scale-110 my-5 text-shadow-yellow-600 hover:text-shadow-md cursor-pointer active:scale-80"
           >
             Exit Game
           </button>
@@ -455,7 +446,7 @@ export const TicTacToeSolo = ({
               playClickSound = { playClickSound };
               isMuted = { isMuted };
             }}
-            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:text-gray-300 cursor-pointer"
+            className="text-4xl text-white lilita-one-regular block mx-auto transition duration-300 ease hover:text-gray-300 cursor-pointer active:scale-80"
           >
             {isMuted ? (
               <i class="fa-solid fa-volume-xmark"></i>
@@ -473,7 +464,7 @@ export const TicTacToeSolo = ({
           />
           <button
             onClick={handlePause}
-            className={`text-3xl cursor-pointer transition duration-300 z-30 ${
+            className={`text-3xl cursor-pointer transition duration-300 z-30 active:scale-80 ${
               pause ? "invisible opacity-0" : "visible opacity-100"
             }`}
           >

@@ -66,6 +66,23 @@
   animation: glowingShadow 1s infinite;
 }
 
+@keyframes glowingTextShadow {
+  0% {
+    text-shadow: 0 0 20px white;
+  }
+  50% {
+    text-shadow: 0 0 20px yellow;
+  }
+  100% {
+    text-shadow: 0 0 20px white;
+  }
+}
+
+.text-glow {
+  text-shadow: 0 0 20px skyblue;
+  animation: glowingTextShadow 1s infinite;
+}
+
 
 @layer utilities {
   @keyframes blink {
