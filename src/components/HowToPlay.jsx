@@ -50,7 +50,7 @@ export const HowToPlay = ({ setHtp, playClickSound, isMuted}) => {
     <div className="flex max-w-[500px] h-screen items-center justify-center mx-auto">
       <div className="p-5 bg-orange-500 border-15 border-black mx-auto relative">
         <button
-          className="absolute top-1 right-2 text-black text-4xl bg-white-600 px-2  hover:text-white transition duration-300 cursor-pointer active:scale-80"
+          className="absolute top-1 right-2 text-black text-4xl bg-white-600 px-2  hover:text-white transition duration-50 cursor-pointer active:scale-80"
           onClick={() => {
             {
               setHtp(false);
@@ -73,7 +73,7 @@ export const HowToPlay = ({ setHtp, playClickSound, isMuted}) => {
               setShow(!show);
               playClickSound();
             }}
-            className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-white text-stroke-black text-shadow-yellow-300 text-shadow-lg show-fade active:scale-80"
+            className="my-1 mx-auto text-center w-full transition duration-50 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-white text-stroke-black text-shadow-yellow-300 text-shadow-lg show-fade active:scale-80"
           >
             {show ? "Back" : "Rush"}
           </button>

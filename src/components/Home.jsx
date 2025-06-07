@@ -166,7 +166,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                 playClickSound = { playClickSound };
                 isMuted = { isMuted };
               }}
-              className="absolute top-5 right-7 text-white text-4xl md:text-5xl px-2 text-stroke-black hover:text-gray-400 transition duration-300 cursor-pointer active:scale-80"
+              className="absolute top-5 right-7 text-white text-4xl md:text-5xl px-2 text-stroke-black hover:text-gray-400 transition duration-50 cursor-pointer active:scale-80"
             >
               {isMuted ? (
                 <i class="fa-solid fa-volume-xmark"></i>
@@ -220,7 +220,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                   handleClick();
                   playClickSound();
                 }}
-                className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-yellow-300 text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30 text-glow active:scale-80"
+                className="my-1 mx-auto text-center w-full transition duration-50 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-yellow-300 text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30 text-glow active:scale-80"
               >
                 SoloRush
               </button>
@@ -229,7 +229,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                   handleTwoPlayer();
                   playClickSound();
                 }}
-                className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-blue-400 text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30 text-glow active:scale-80"
+                className="my-1 mx-auto text-center w-full transition duration-50 ease hover:scale-110 cursor-pointer lilita-one-regular text-5xl text-blue-400 text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30 text-glow active:scale-80"
               >
                 PvP
               </button>
@@ -238,7 +238,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                   handleHTP();
                   playClickSound();
                 }}
-                className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-4xl text-white text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30  active:scale-80"
+                className="my-1 mx-auto text-center w-full transition duration-50 ease hover:scale-110 cursor-pointer lilita-one-regular text-4xl text-white text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30  active:scale-80"
               >
                 How to Play
               </button>
@@ -247,7 +247,7 @@ export const Home = ({ isMuted, setIsMuted }) => {
                   handleAbout();
                   playClickSound();
                 }}
-                className="my-1 mx-auto text-center w-full transition duration-300 ease hover:scale-110 cursor-pointer lilita-one-regular text-4xl text-white text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30  active:scale-80"
+                className="my-1 mx-auto text-center w-full transition duration-50 ease hover:scale-110 cursor-pointer lilita-one-regular text-4xl text-white text-stroke-black text-shadow-yellow-500 hover:text-shadow-lg z-30  active:scale-80"
               >
                 About
               </button>

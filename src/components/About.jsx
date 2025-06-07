@@ -6,7 +6,7 @@ export const About = ({ setAbout, playClickSound, isMuted }) => {
     <div className="flex max-w-[500px] h-screen items-center justify-center mx-auto">
       <div className="p-5 pb-10 bg-orange-500 border-15 border-black mx-auto relative">
         <button
-          className="absolute top-1 right-2 text-black text-4xl bg-white-600 px-2  hover:text-white transition duration-300 cursor-pointer active:scale-80"
+          className="absolute top-1 right-2 text-black text-4xl bg-white-600 px-2  hover:text-white transition duration-50 cursor-pointer active:scale-80"
           onClick={() => {
             setAbout(false);
             playClickSound();

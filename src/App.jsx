@@ -55,7 +55,7 @@ function App() {
           <div className="h-screen w-screen flex justify-center items-center">
             <button
               onClick={() => setIsLanded(true)}
-              className="text-center mx-auto text-6x text-5xl lilita-one-regular transition duration-300 ease hover:scale-110 text-stroke-black cursor-pointer show-fade active:scale-80"
+              className="text-center mx-auto text-6x text-5xl lilita-one-regular transition duration-50 ease hover:scale-110 text-stroke-black cursor-pointer show-fade active:scale-80"
             >
               Start
             </button>
